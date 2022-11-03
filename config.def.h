@@ -19,6 +19,8 @@ static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
 static const unsigned int baralpha = 0xf0;
 static const unsigned int borderalpha = OPAQUE;
+static int vp = 2;       /* vertical padding of bar */
+static int sp = 4;       /* horizontal padding of bar */
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
