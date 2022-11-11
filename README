@@ -1,0 +1,12 @@
+# Patches
+see: https://dwm.suckless.org/patches/
+
+# Features
+== alpha ==
+Allow dwm to have translucent bars, while keeping all the text on it opaque.
+
+== systray ==
+A simple system tray implementation. Multi-monitor is also supported. The tray follows the selected monitor.
+
+== swallow ==
+Clients marked with isterminal in config.h swallow a window opened by any child process.
