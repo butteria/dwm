@@ -30,6 +30,19 @@ static const unsigned int alphas[][3]      = {
     [SchemeNorm] = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
+/*
+ * Allow dwm to execute commands from autostart array in your config.h file.
+ * And when you exit dwm all processes from autostart array will be killed.
+*/
+static const char *const autostart[] = {
+    "picom", NULL,
+    "feh", "--bg-fill", "/home/butteria/Pictures/wallpapers/background.png", NULL,
+    "fcitx5", NULL,
+    "xset", "r", "rate", "200", "40", NULL,
+    "motrix", NULL,
+    "flameshot", NULL,
+	NULL /* terminate */
+};
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
