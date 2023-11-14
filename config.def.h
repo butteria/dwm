@@ -24,6 +24,7 @@ static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeHid]  = { col_cyan,  col_gray1, col_cyan  },
 };
 static const unsigned int alphas[][3]      = {
     /*               fg      bg        border*/
@@ -39,7 +40,7 @@ static const char *const autostart[] = {
     "feh", "--bg-fill", "/home/butteria/Pictures/wallpapers/background.png", NULL,
     "fcitx5", NULL,
     "xset", "r", "rate", "200", "40", NULL,
-    "motrix", NULL,
+    // "motrix", "&", NULL,
     "flameshot", NULL,
 	NULL /* terminate */
 };
@@ -56,7 +57,7 @@ static const Rule rules[] = {
 	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
 	{ "Firefox", NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
 	{ "kitty",   NULL,     NULL,           0,         0,          1,           0,        -1 },
-	{ "mpv",     NULL,     NULL,           0,         1,          0,           1,        -1 },
+	{ "mpv",     NULL,     NULL,           0,         1,          0,           0,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -96,8 +97,10 @@ static const Key keys[] = {
     { MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_Escape, quit,           {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_j,      focusstackvis,  {.i = +1 } },
+	{ MODKEY,                       XK_k,      focusstackvis,  {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_j,      focusstackhid,  {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,      focusstackhid,  {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
@@ -115,6 +118,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY,                       XK_s,      show,           {0} },
+	{ MODKEY|ShiftMask,             XK_s,      showall,        {0} },
+	{ MODKEY,                       XK_h,      hide,           {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -141,5 +147,6 @@ static const Button buttons[] = {
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 };
 
