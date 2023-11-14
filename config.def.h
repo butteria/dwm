@@ -13,6 +13,18 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 #define ICONSIZE 16   /* icon size */
 #define ICONSPACING 5 /* space between icon and title */
+/* gruvbox color theme */
+static const char gruvbox_bg[] = "#282828";
+static const char gruvbox_fg[] = "#ebdbb2";
+static const char gruvbox_red[] = "#cc241d";
+static const char gruvbox_green[] = "#98971a";
+static const char gruvbox_yellow[] = "#d79921";
+static const char gruvbox_blue[] = "#458588";
+static const char gruvbox_purple[] = "#b16286";
+static const char gruvbox_aqua[] = "#689d6a";
+static const char gruvbox_gray[] = "#a89984";
+static const char gruvbox_orange[] = "#d65d0e";
+
 static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=10" };
 static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=10";
 static const char col_gray1[]       = "#222222";
@@ -47,6 +59,13 @@ static const char *const autostart[] = {
 	NULL /* terminate */
 };
 
+static const char *tagsel[][2] = {
+   /*   fg         bg    */
+  { gruvbox_fg, gruvbox_bg }, /* norm */
+  { gruvbox_bg, gruvbox_fg  }, /* sel */
+  { gruvbox_bg, gruvbox_orange }, /* occ but not sel */
+  { gruvbox_bg, gruvbox_purple }, /* has pinned tag */
+};
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
