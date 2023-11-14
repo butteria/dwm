@@ -62,8 +62,8 @@ static const char *const autostart[] = {
 static const char *tagsel[][2] = {
    /*   fg         bg    */
   { gruvbox_fg, gruvbox_bg }, /* norm */
-  { gruvbox_bg, gruvbox_fg  }, /* sel */
-  { gruvbox_bg, gruvbox_orange }, /* occ but not sel */
+  { gruvbox_bg, gruvbox_orange  }, /* sel */
+  { gruvbox_bg, gruvbox_fg }, /* occ but not sel */
   { gruvbox_bg, gruvbox_purple }, /* has pinned tag */
 };
 /* tagging */
