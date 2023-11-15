@@ -1045,9 +1045,15 @@ drawbar(Monitor *m)
                     }
                     remainder--;
                 }
-                drw_text(drw, x, 0, tabw, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), c->name, 0);
-                if (c->icon)
-                    drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
+			    if (TEXTW(c->name) > tabw) { /* title is bigger than the width of the title rectangle, don't center */
+                    drw_text(drw, x, 0, tabw, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), c->name, 0);
+                    if (c->icon)
+                        drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
+                } else { /* center window title */
+				    drw_text(drw, x, 0, tabw, bh, (c->icon ? c->icw + ICONSPACING : 0) + (tabw - TEXTW(c->name)) / 2, c->name, 0);
+                    if (c->icon)
+                        drw_pic(drw, x + (tabw - TEXTW(c->name)) / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
+                }
                 x += tabw;
             }
         } else {
