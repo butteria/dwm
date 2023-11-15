@@ -36,9 +36,9 @@ static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][4]      = {
 	/*               fg         bg         border     float */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2, col_gray2 },
-	[SchemeSel] =  { col_gray4, col_cyan,  col_gray2, col_cyan },
-	[SchemeHid]  = { col_cyan,  col_gray1, col_gray2, col_cyan },
+	[SchemeNorm] = { gruvbox_fg, gruvbox_bg, col_gray2, col_gray2 },
+	[SchemeSel] =  { gruvbox_fg, gruvbox_orange,  col_gray2, col_cyan },
+	[SchemeHid]  = { gruvbox_orange, col_gray2, col_gray2, col_cyan },
 };
 static const unsigned int alphas[][3]      = {
     /*               fg      bg        border*/

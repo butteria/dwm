@@ -205,7 +205,7 @@ static void detachstack(Client *c);
 static Monitor *dirtomon(int dir);
 static void drawbar(Monitor *m);
 static void drawbars(void);
-static void enternotify(XEvent *e);
+// static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static void focus(Client *c);
 static void focusin(XEvent *e);
@@ -322,7 +322,8 @@ static void (*handler[LASTEvent]) (XEvent *) = {
     [ConfigureRequest] = configurerequest,
     [ConfigureNotify] = configurenotify,
     [DestroyNotify] = destroynotify,
-    [EnterNotify] = enternotify,
+    // disable mouse moving focus
+    // [EnterNotify] = enternotify,
     [Expose] = expose,
     [FocusIn] = focusin,
     [KeyPress] = keypress,
@@ -1071,7 +1072,7 @@ drawbars(void)
         updatesystray(0);
 }
 
-void
+/*void
 enternotify(XEvent *e)
 {
     Client *c;
@@ -1088,7 +1089,7 @@ enternotify(XEvent *e)
     } else if (!c || c == selmon->sel)
         return;
     focus(c);
-}
+}*/
 
 void
 expose(XEvent *e)
@@ -2765,8 +2766,6 @@ updatesizehints(Client *c)
 void
 updatestatus(void)
 {
-    if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
-        strcpy(stext, "dwm-"VERSION);
     drawbar(selmon);
 }
 
