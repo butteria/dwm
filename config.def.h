@@ -53,7 +53,7 @@ static const char *const autostart[] = {
     "picom", NULL,
     "feh", "--bg-fill", "/home/butteria/Pictures/wallpapers/dwm_bg.png", NULL,
     "fcitx5", NULL,
-    "xset r rate 200 40", NULL,
+    "xset", "r", "rate", "200", "40", NULL,
     // "motrix", "&", NULL,
     "flameshot", NULL,
 	NULL /* terminate */
