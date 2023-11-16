@@ -256,7 +256,6 @@ static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
-static void show(const Arg *arg);
 static void showall(const Arg *arg);
 static void showwin(Client *c);
 static void showhide(Client *c);
@@ -2215,14 +2214,6 @@ seturgent(Client *c, int urg)
     wmh->flags = urg ? (wmh->flags | XUrgencyHint) : (wmh->flags & ~XUrgencyHint);
     XSetWMHints(dpy, c->win, wmh);
     XFree(wmh);
-}
-
-void
-show(const Arg *arg)
-{
-    if (selmon->hidsel)
-        selmon->hidsel = 0;
-    showwin(selmon->sel);
 }
 
 void

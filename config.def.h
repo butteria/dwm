@@ -38,7 +38,7 @@ static const char *colors[][4]      = {
 	/*               fg         bg         border     float */
 	[SchemeNorm] = { gruvbox_fg, gruvbox_bg, col_gray2, col_gray2 },
 	[SchemeSel] =  { gruvbox_fg, gruvbox_orange,  col_gray2, col_cyan },
-	[SchemeHid]  = { gruvbox_orange, col_gray2, col_gray2, col_cyan },
+	[SchemeHid]  = { gruvbox_orange, col_gray1, col_gray2, col_cyan },
 };
 static const unsigned int alphas[][3]      = {
     /*               fg      bg        border*/
@@ -123,6 +123,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
     { MODKEY,                       XK_q,      killclient,     {0} },
+    { MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("kill -9 $(xprop | grep _NET_WM_PID | awk '{print $3}')") },
 	{ MODKEY,                       XK_Escape, quit,           {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstackvis,  {.i = +1 } },
