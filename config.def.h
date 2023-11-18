@@ -29,7 +29,7 @@ static const char gruvbox_aqua[] = "#689d6a";
 static const char gruvbox_gray[] = "#a89984";
 static const char gruvbox_orange[] = "#d65d0e";
 
-static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=10" };
+static const char *fonts[]          = { "MonoPingFangJetBrains:size=10" };
 static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
