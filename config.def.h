@@ -1,5 +1,5 @@
 /* See LICENSE file for copyright and license details. */
-
+#include <X11/XF86keysym.h>
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 6;        /* gaps between windows */
@@ -127,6 +127,11 @@ static const Layout layouts[] = {
 static const char *launchercmd[] = { "rofi", "-no-lazy-grab", "-show", "drun", "-modi", "drun", "-theme", "~/.config/rofi/launcher.rasi", NULL };
 static const char *termcmd[]  = { "kitty", NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
+static const char *up_vol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%",   NULL  };
+static const char *down_vol[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%",   NULL  };
+static const char *mute_vol[] = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL  };
+static const char *brighter[] = { "brightnessctl", "set", "5%+", NULL  };
+static const char *dimmer[]   = { "brightnessctl", "set", "5%-", NULL  };
 
 #include "exitdwm.c"
 static const Key keys[] = {
@@ -155,6 +160,13 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_s,      togglesticky,   {0} },
 	{ MODKEY,                       0,      togglealttag,   {0} },
+    /* Adjusting volume */
+    { 0, XF86XK_AudioMute,        spawn, {.v = mute_vol }  },
+    { 0, XF86XK_AudioLowerVolume, spawn, {.v = down_vol }  },
+    { 0, XF86XK_AudioRaiseVolume, spawn, {.v = up_vol }  },
+    /* Adjusting brightness */
+    { 0, XF86XK_MonBrightnessDown, spawn, {.v = dimmer }  },
+    { 0, XF86XK_MonBrightnessUp,   spawn, {.v = brighter }  },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
