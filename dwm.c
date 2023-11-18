@@ -154,6 +154,7 @@ struct Monitor {
     unsigned int seltags;
     unsigned int sellt;
     unsigned int tagset[2];
+	unsigned int alttag;
     int showbar;
     int topbar;
     int hidsel;
@@ -225,6 +226,7 @@ static void hide(const Arg *arg);
 static void hidewin(Client *c);
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
+static void keyrelease(XEvent *e);
 static void killclient(const Arg *arg);
 static void layoutmenu(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
@@ -268,6 +270,7 @@ static Monitor *systraytomon(Monitor *m);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
+static void togglealttag(const Arg *arg);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void togglesticky(const Arg *arg);
@@ -330,6 +333,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
     [Expose] = expose,
     [FocusIn] = focusin,
     [KeyPress] = keypress,
+	[KeyRelease] = keyrelease,
     [MappingNotify] = mappingnotify,
     [MapRequest] = maprequest,
     [MotionNotify] = motionnotify,
@@ -985,7 +989,7 @@ void
 drawbar(Monitor *m)
 {
     int indn;
-    int x, w, tw = 0, stw = 0, n = 0, scm;
+    int x, w, tw = 0, stw = 0, n = 0, scm, wdelta;
     unsigned int i, occ = 0, urg = 0;
     Client *c;
 
@@ -1019,6 +1023,7 @@ drawbar(Monitor *m)
         if(!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
             continue;
         w = TEXTW(tags[i]);
+		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;
         if (m->tagset[m->seltags] & 1 << i)
             drw_setscheme(drw, tagscheme[1]);
         else if (m == selmon && selmon->sel && selmon->sel->tags & 1 << i)
@@ -1027,7 +1032,7 @@ drawbar(Monitor *m)
             drw_setscheme(drw, tagscheme[2]);
         else
             drw_setscheme(drw, tagscheme[0]);
-        drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
         for (c = m->clients; c; c = c->next) {
             if (c->tags & (1 << i)) {
                 drw_rect(drw, x + 2, 1 + (indn * 2), selmon->sel == c ? 6 : 3, 3, 1, urg & 1 << i);
@@ -1491,6 +1496,25 @@ keypress(XEvent *e)
         if (keysym == keys[i].keysym
         && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)
         && keys[i].func)
+            keys[i].func(&(keys[i].arg));
+}
+
+void
+keyrelease(XEvent *e)
+{
+	unsigned int i;
+	KeySym keysym;
+	XKeyEvent *ev;
+
+	ev = &e->xkey;
+	keysym = XKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0);
+
+    for (i = 0; i < LENGTH(keys); i++)
+        if (momentaryalttags
+        && keys[i].func && keys[i].func == togglealttag
+        && selmon->alttag
+        && (keysym == keys[i].keysym
+        || CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)))
             keys[i].func(&(keys[i].arg));
 }
 
@@ -2465,6 +2489,13 @@ tile(Monitor *m)
             if (ty + HEIGHT(c) < m->wh)
                 ty += HEIGHT(c);
         }
+}
+
+void
+togglealttag(const Arg *arg)
+{
+	selmon->alttag = !selmon->alttag;
+	drawbar(selmon);
 }
 
 void
