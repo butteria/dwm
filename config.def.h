@@ -41,7 +41,7 @@ static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][4]      = {
 	/*               fg         bg         border     float */
 	[SchemeNorm] = { gruvbox_fg, gruvbox_bg, col_gray2, col_gray2 },
-	[SchemeSel] =  { gruvbox_fg, gruvbox_orange,  col_gray2, col_cyan },
+	[SchemeSel] =  { gruvbox_fg, gruvbox_orange,  gruvbox_orange, gruvbox_red },
 	[SchemeHid]  = { gruvbox_orange, col_gray1, col_gray2, col_cyan },
 };
 static const unsigned int alphas[][3]      = {
