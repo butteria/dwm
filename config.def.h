@@ -30,7 +30,7 @@ static const char gruvbox_gray[] = "#a89984";
 static const char gruvbox_orange[] = "#d65d0e";
 
 static const char *fonts[]          = { "MonoPingFangJetBrains:size=10" };
-static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=10";
+static const char *dmenufont[]      = { "MonoPingFangJetBrains:size=10" };
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -123,13 +123,14 @@ static const char *launchercmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", col_g
 static const char *termcmd[]  = { "kitty", NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 
+#include "exitdwm.c"
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = launchercmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
     { MODKEY,                       XK_q,      killclient,     {0} },
     { MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("kill -9 $(xprop | grep _NET_WM_PID | awk '{print $3}')") },
-	{ MODKEY,                       XK_Escape, quit,           {0} },
+	{ MODKEY,                       XK_Escape, exitdwm,        {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstackvis,  {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstackvis,  {.i = -1 } },
