@@ -38,8 +38,8 @@ void drw_free(Drw *drw);
 /* Fnt abstraction */
 Fnt *drw_fontset_create(Drw* drw, const char *fonts[], size_t fontcount);
 void drw_fontset_free(Fnt* set);
-unsigned int drw_fontset_getwidth(Drw *drw, const char *text);
-unsigned int drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int n);
+unsigned int drw_fontset_getwidth(Drw *drw, const char *text, int fontindex);
+unsigned int drw_fontset_getwidth_clamp(Drw *drw, const char *text, unsigned int n, int fontindex);
 void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h);
 
 /* Colorscheme abstraction */
@@ -58,7 +58,7 @@ Picture drw_picture_create_resized(Drw *drw, char *src, unsigned int src_w, unsi
 
 /* Drawing functions */
 void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert);
-int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert);
+int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, const int fontindex);
 void drw_pic(Drw *drw, int x, int y, unsigned int w, unsigned int h, Picture pic);
 
 /* Map functions */

@@ -29,8 +29,10 @@ static const char gruvbox_aqua[] = "#689d6a";
 static const char gruvbox_gray[] = "#a89984";
 static const char gruvbox_orange[] = "#d65d0e";
 
-static const char *fonts[]          = { "MonoPingFangJetBrains:size=10" };
-static const char *dmenufont[]      = { "MonoPingFangJetBrains:size=10" };
+static const char *fonts[] = {
+    "JetBrainsMono Nerd Font:size=10",
+	"PingFangJetBrains:size=10",      // fonts for title contains chinese font.
+};
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -151,7 +153,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	//{ MODKEY,                       XK_s,      togglesticky,   {0} },
+	{ MODKEY,                       XK_s,      togglesticky,   {0} },
 	{ MODKEY,                       0,      togglealttag,   {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)

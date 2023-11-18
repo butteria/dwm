@@ -64,7 +64,7 @@
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw + gappx)
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw + gappx)
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
-#define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
+#define TEXTW(X,F)                (drw_fontset_getwidth(drw, (X),(F)) + lrpad)
 #define ColFloat                3
 #define OPAQUE                  0xffU
 
@@ -222,7 +222,6 @@ static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static unsigned int getsystraywidth();
 static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
-static void hide(const Arg *arg);
 static void hidewin(Client *c);
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
@@ -258,7 +257,6 @@ static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
-static void showall(const Arg *arg);
 static void showwin(Client *c);
 static void showhide(Client *c);
 static void sigchld(int unused);
@@ -627,17 +625,17 @@ buttonpress(XEvent *e)
             /* Do not reserve space for vacant tags */
             if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
                 continue;
-            x += TEXTW(tags[i]);
+			x += TEXTW(tags[i],0);
         } while (ev->x >= x && ++i < LENGTH(tags));
         if (i < LENGTH(tags)) {
             click = ClkTagBar;
             arg.ui = 1 << i;
-        } else if (ev->x < x + TEXTW(selmon->ltsymbol))
+        } else if (ev->x < x + TEXTW(selmon->ltsymbol, 0))
             click = ClkLtSymbol;
-        else if (ev->x > selmon->ww - TEXTW(stext) - getsystraywidth() + lrpad - 2)
+        else if (ev->x > selmon->ww - TEXTW(stext, 0) - getsystraywidth() + lrpad - 2)
             click = ClkStatusText;
         else {
-            x += TEXTW(selmon->ltsymbol);
+            x += TEXTW(selmon->ltsymbol, 0);
             c = m->clients;
 
             if (c) {
@@ -1005,8 +1003,8 @@ drawbar(Monitor *m)
     /* draw status first so it can be overdrawn by tags later */
     if (m == selmon) { /* status is only drawn on selected monitor */
         drw_setscheme(drw, scheme[SchemeNorm]);
-        tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
-        drw_text(drw, m->ww - tw - stw, 0, tw, bh, 0, stext, 0);
+        tw = TEXTW(stext, 0) - lrpad + 2; /* 2px right padding */
+        drw_text(drw, m->ww - tw - stw, 0, tw, bh, 0, stext, 0, 0);
     }
 
     for (c = m->clients; c; c = c->next) {
@@ -1022,8 +1020,8 @@ drawbar(Monitor *m)
         /* Do not draw vacant tags */
         if(!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
             continue;
-        w = TEXTW(tags[i]);
-		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;
+        w = TEXTW(tags[i], 0);
+		wdelta = selmon->alttag ? abs(TEXTW(tags[i], 0) - TEXTW(tagsalt[i], 0)) / 2 : 0;
         if (m->tagset[m->seltags] & 1 << i)
             drw_setscheme(drw, tagscheme[1]);
         else if (m == selmon && selmon->sel && selmon->sel->tags & 1 << i)
@@ -1032,7 +1030,7 @@ drawbar(Monitor *m)
             drw_setscheme(drw, tagscheme[2]);
         else
             drw_setscheme(drw, tagscheme[0]);
-		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
+		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i, 0);
         for (c = m->clients; c; c = c->next) {
             if (c->tags & (1 << i)) {
                 drw_rect(drw, x + 2, 1 + (indn * 2), selmon->sel == c ? 6 : 3, 3, 1, urg & 1 << i);
@@ -1043,9 +1041,9 @@ drawbar(Monitor *m)
             drw_rect(drw, x + ulinepad, bh - ulinestroke - ulinevoffset, w - (ulinepad * 2), ulinestroke, 1, 0);
         x += w;
     }
-    w = TEXTW(m->ltsymbol);
+    w = TEXTW(m->ltsymbol, 0);
     drw_setscheme(drw, scheme[SchemeNorm]);
-    x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+    x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0, 0);
 
     if ((w = m->ww - tw - stw - x) > bh) {
         if (n > 0) {
@@ -1068,14 +1066,14 @@ drawbar(Monitor *m)
                     }
                     remainder--;
                 }
-			    if (TEXTW(c->name) > tabw) { /* title is bigger than the width of the title rectangle, don't center */
-                    drw_text(drw, x, 0, tabw, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), c->name, 0);
+			    if (TEXTW(c->name, 1) > tabw) { /* title is bigger than the width of the title rectangle, don't center */
+                    drw_text(drw, x, 0, tabw, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), c->name, 0, 1);
                     if (c->icon)
                         drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
                 } else { /* center window title */
-				    drw_text(drw, x, 0, tabw, bh, (c->icon ? c->icw + ICONSPACING : 0) + (tabw - TEXTW(c->name)) / 2, c->name, 0);
+				    drw_text(drw, x, 0, tabw, bh, (c->icon ? c->icw + ICONSPACING : 0) + (tabw - TEXTW(c->name, 1)) / 2, c->name, 0, 1);
                     if (c->icon)
-                        drw_pic(drw, x + (tabw - TEXTW(c->name)) / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
+                        drw_pic(drw, x + (tabw - TEXTW(c->name, 1)) / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon);
                 }
                 x += tabw;
             }
@@ -1431,14 +1429,6 @@ grabkeys(void)
                     XGrabKey(dpy, code, keys[i].mod | modifiers[j], root,
                         True, GrabModeAsync, GrabModeAsync);
     }
-}
-
-void
-hide(const Arg *arg)
-{
-    hidewin(selmon->sel);
-    focus(NULL);
-    arrange(selmon);
 }
 
 void
@@ -2291,23 +2281,6 @@ seturgent(Client *c, int urg)
 }
 
 void
-showall(const Arg *arg)
-{
-    Client *c = NULL;
-    selmon->hidsel = 0;
-    for (c = selmon->clients; c; c = c->next) {
-        if (ISVISIBLE(c))
-            showwin(c);
-    }
-    if (!selmon->sel) {
-        for (c = selmon->clients; c && !ISVISIBLE(c); c = c->next);
-        if (c)
-            focus(c);
-    }
-    restack(selmon);
-}
-
-void
 showwin(Client *c)
 {
     if (!c || !HIDDEN(c))
@@ -2466,11 +2439,8 @@ tile(Monitor *m)
     Client *c;
 
     for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
-    if (n == 0)
-        return;
-
-	if (n == 1)
-		bw = 0;
+    if(n == 0) return;
+    if(n == 1) bw = 0;
 	else
 		bw = borderpx;
     if (n > m->nmaster)
