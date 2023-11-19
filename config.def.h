@@ -43,7 +43,7 @@ static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][4]      = {
 	/*               fg         bg         border     float */
 	[SchemeNorm] = { gruvbox_fg, gruvbox_bg, col_gray2, col_gray2 },
-	[SchemeSel] =  { gruvbox_fg, gruvbox_orange,  gruvbox_orange, gruvbox_red },
+	[SchemeSel] =  { gruvbox_fg, gruvbox_orange,  gruvbox_orange, col_gray1 },
 	[SchemeHid]  = { gruvbox_orange, col_gray1, col_gray2, col_cyan },
 };
 static const unsigned int alphas[][3]      = {
@@ -56,11 +56,10 @@ static const unsigned int alphas[][3]      = {
  * And when you exit dwm all processes from autostart array will be killed.
 */
 static const char *const autostart[] = {
-    "picom", NULL,
+    "compfy", NULL,
     "feh", "--bg-fill", "/home/butteria/Pictures/wallpapers/dwm_bg.png", NULL,
     "fcitx5", NULL,
     "xset", "r", "rate", "200", "40", NULL,
-    // "motrix", "&", NULL,
     "flameshot", NULL,
 	NULL /* terminate */
 };
@@ -189,6 +188,7 @@ static const Button buttons[] = {
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+	{ ClkRootWin,           0,              Button3,        spawn,          SHCMD("jgmenu_run")},
 	{ ClkTagBar,            0,              Button1,        view,           {0} },
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
