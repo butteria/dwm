@@ -90,7 +90,7 @@ enum { NetSupported, NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation, N
        NetWMName, NetWMSticky, NetWMIcon, NetWMState, NetWMFullscreen, NetActiveWindow, NetWMWindowType, NetWMWindowTypeDock,
        NetSystemTrayOrientationHorz, NetWMWindowTypeDialog, NetClientList, NetWMCheck, NetClientInfo, NetLast }; /* EWMH atoms */
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
-enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
+enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkButton, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
 
 typedef union {
@@ -622,33 +622,36 @@ buttonpress(XEvent *e)
         unsigned int occ = 0;
         for(c = m->clients; c; c=c->next)
             occ |= c->tags;
-        do {
-            /* Do not reserve space for vacant tags */
-            if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
-                continue;
-			x += TEXTW(tags[i],0);
-        } while (ev->x >= x && ++i < LENGTH(tags));
-        if (i < LENGTH(tags)) {
-            click = ClkTagBar;
-            arg.ui = 1 << i;
-        } else if (ev->x < x + TEXTW(selmon->ltsymbol, 0))
-            click = ClkLtSymbol;
-        else if (ev->x > selmon->ww - TEXTW(stext, 0) - getsystraywidth() + lrpad - 2)
-            click = ClkStatusText;
-        else {
-            x += TEXTW(selmon->ltsymbol, 0);
-            c = m->clients;
-
-            if (c) {
-                do {
-                    if (!ISVISIBLE(c))
-                        continue;
-                    else
-                        x +=(1.0 / (double)m->bt) * m->btw;
-                } while (ev->x > x && (c = c->next));
-
-                click = ClkWinTitle;
-                arg.v = c;
+        x += TEXTW(buttonbar, 0);
+        if(ev->x < x) {
+            click = ClkButton;
+        } else {
+            do {
+                /* Do not reserve space for vacant tags */
+                if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
+                    continue;
+			    x += TEXTW(tags[i],0);
+            } while (ev->x >= x && ++i < LENGTH(tags));
+            if (i < LENGTH(tags)) {
+                click = ClkTagBar;
+                arg.ui = 1 << i;
+            } else if (ev->x < x + TEXTW(selmon->ltsymbol, 0))
+                click = ClkLtSymbol;
+            else if (ev->x > selmon->ww - TEXTW(stext, 0) - getsystraywidth() + lrpad - 2)
+                click = ClkStatusText;
+            else {
+                x += TEXTW(selmon->ltsymbol, 0);
+                c = m->clients;
+                if (c) {
+                    do {
+                        if (!ISVISIBLE(c))
+                            continue;
+                        else
+                            x +=(1.0 / (double)m->bt) * m->btw;
+                    } while (ev->x > x && (c = c->next));
+                    click = ClkWinTitle;
+                    arg.v = c;
+                }
             }
         }
     } else if ((c = wintoclient(ev->window))) {
@@ -1016,6 +1019,9 @@ drawbar(Monitor *m)
             urg |= c->tags;
     }
     x = 0;
+	w = TEXTW(buttonbar, 0);
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	x = drw_text(drw, x, 0, w, bh, lrpad / 2, buttonbar, 0, 0);
     for (i = 0; i < LENGTH(tags); i++) {
         indn = 0;
         /* Do not draw vacant tags */
