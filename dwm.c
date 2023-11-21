@@ -1044,8 +1044,6 @@ drawbar(Monitor *m)
                 indn++;
             }
         }
-        if (ulineall || m->tagset[m->seltags] & 1 << i) /* if there are conflicts, just move these lines directly underneath both 'drw_setscheme' and 'drw_text' :) */
-            drw_rect(drw, x + ulinepad, bh - ulinestroke - ulinevoffset, w - (ulinepad * 2), ulinestroke, 1, 0);
         x += w;
     }
     w = TEXTW(m->ltsymbol, 0);

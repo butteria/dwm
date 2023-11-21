@@ -12,7 +12,7 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char buttonbar[]       = "";
+static const char buttonbar[]       = "";
 static const unsigned int stairpx   = 20;       /* depth of the stairs layout */
 static const int stairdirection     = 1;        /* 0: left-aligned, 1: right-aligned */
 static const int stairsamesize      = 1;        /* 1 means shrink all the staired windows to the same size */
@@ -60,7 +60,6 @@ static const char *const autostart[] = {
     "compfy", NULL,
     "feh", "--bg-fill", "/home/butteria/Pictures/wallpapers/dwm_bg.png", NULL,
     "fcitx5", NULL,
-    "xset", "r", "rate", "200", "40", NULL,
     "flameshot", NULL,
 	NULL /* terminate */
 };
@@ -73,14 +72,10 @@ static const char *tagsel[][2] = {
   { gruvbox_bg, gruvbox_purple }, /* has pinned tag */
 };
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+// "⁰","¹","²","³","⁴","⁵","⁶","⁷","⁸","⁹","¹⁰"]'
+static const char *tags[] = { "", "", "", "", "", "", "", "8", "9" };
 static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 static const int momentaryalttags = 0; /* 1 means alttags will show only when key is held down*/
-
-static const unsigned int ulinepad	= 5;	/* horizontal padding between the underline and tag */
-static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
-static const unsigned int ulinevoffset	= 0;	/* how far above the bottom of the bar the line should appear */
-static const int ulineall 		= 0;	/* 1 to show underline on all tags, 0 for just the active ones */
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -88,11 +83,14 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
-	{ "firefox", NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
-	{ "kitty",   NULL,     NULL,           0,         0,          1,           0,        -1 },
-	{ "mpv",     NULL,     NULL,           0,         1,          0,           0,        -1 },
-	{ "MATLAB",  NULL,     NULL,           1<<7,      0,          0,           0,        -1 },
+	{ "kitty",   NULL,     NULL,           1,         0,          1,           0,        -1 },
+	{ "firefox", NULL,     NULL,           1 << 1,    0,          0,          -1,        -1 },
+	{ "Steam",   NULL,     NULL,           1 << 3,    0,          0,           0,        -1 },
+    { "weixin",  NULL,     NULL,           1 << 4,    1,          0,           1,        -1 },
+	{ "qq",      NULL,     NULL,           1 << 4,    1,          0,           1,        -1 },
+	{ "MATLAB",  NULL,     NULL,           1 << 5,    0,          0,           1,        -1 },
+	{ "Gimp",    NULL,     NULL,           1 << 5,    0,          0,           1,        -1 },
+	{ "mpv",     NULL,     NULL,           0,         1,          0,           1,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -123,7 +121,6 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-//static const char *launchercmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *launchercmd[] = { "rofi", "-no-lazy-grab", "-show", "drun", "-modi", "drun", "-theme", "~/.config/rofi/launcher.rasi", NULL };
 static const char *termcmd[]  = { "kitty", NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
@@ -159,7 +156,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_s,      togglesticky,   {0} },
-	{ MODKEY,                       0,      togglealttag,   {0} },
+	{ MODKEY,                       XK_n,      togglealttag,   {0} },
     /* Adjusting volume */
     { 0, XF86XK_AudioMute,        spawn, {.v = mute_vol }  },
     { 0, XF86XK_AudioLowerVolume, spawn, {.v = down_vol }  },
