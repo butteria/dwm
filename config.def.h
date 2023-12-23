@@ -86,7 +86,7 @@ static const Rule rules[] = {
 	 */
 	/* class     instance  title           tags mask  isfloating floatpos        isterminal  noswallow  monitor */
 	{ "Dragon",  NULL,     NULL,           0,         1,         "50% 5%",          0,           0,        -1 },
-	{ "kitty",   NULL,     "kitty_fly",    0,         1,         "50% 50% 70% 70%", 0,           0,        -1 },
+	{ "kitty",   NULL,     "kitty_fly",    0,         1,         "50% 50% 70% 70%", 1,           0,        -1 },
 	{ "kitty",   NULL,     "kitty_stack",  0,         0,         NULL,              1,           0,        -1 },
 	{ "firefox", NULL,     NULL,           1 << 1,    0,         NULL,              0,          -1,        -1 },
 	{ "Steam",   NULL,     NULL,           1 << 3,    0,         NULL,              0,           0,        -1 },
@@ -165,7 +165,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_s,      togglesticky,   {0} },
+	{ MODKEY,                       XK_f,      togglefloating, {0} },
 	{ MODKEY,                       XK_n,      togglealttag,   {0} },
     { MODKEY|ControlMask,           XK_u,        floatpos,   {.v = "  0%   0% 30% 30%" } }, // ↖
     { MODKEY|ControlMask,           XK_i,        floatpos,   {.v = " 50%   0% 30% 30%" } }, // ↑
@@ -204,7 +204,7 @@ static const Button buttons[] = {
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
+	{ ClkClientWin,         MODKEY,         Button2,        togglesticky, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
 	{ ClkRootWin,           0,              Button3,        spawn,          SHCMD("jgmenu_run")},
 	{ ClkTagBar,            0,              Button1,        view,           {0} },
