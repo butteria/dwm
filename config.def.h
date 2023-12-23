@@ -16,6 +16,8 @@ static const char buttonbar[]       = "";
 static const unsigned int stairpx   = 20;       /* depth of the stairs layout */
 static const int stairdirection     = 1;        /* 0: left-aligned, 1: right-aligned */
 static const int stairsamesize      = 1;        /* 1 means shrink all the staired windows to the same size */
+static int floatposgrid_x           = 5;        /* float grid columns */
+static int floatposgrid_y           = 5;        /* float grid rows */
 #define ICONSIZE 16   /* icon size */
 #define ICONSPACING 5 /* space between icon and title */
 /* gruvbox color theme */
@@ -82,18 +84,18 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "dragon",  NULL,     NULL,           0,         1,          0,          -1,        -1 },
-	{ "kitty",   NULL,     "kitty_fly",    0,         1,          0,           0,        -1 },
-	{ "kitty",   NULL,     "kitty_stack",  0,         0,          0,           0,        -1 },
-	{ "firefox", NULL,     NULL,           1 << 1,    0,          0,          -1,        -1 },
-	{ "Steam",   NULL,     NULL,           1 << 3,    0,          0,           0,        -1 },
-    { "weixin",  NULL,     NULL,           1 << 4,    1,          0,           1,        -1 },
-	{ "qq",      NULL,     NULL,           1 << 4,    1,          0,           1,        -1 },
-	{ "MATLAB",  NULL,     NULL,           1 << 5,    0,          0,           1,        -1 },
-	{ "Gimp",    NULL,     NULL,           1 << 5,    0,          0,           1,        -1 },
-	{ "mpv",     NULL,     NULL,           0,         1,          0,           0,        -1 },
-	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
+	/* class     instance  title           tags mask  isfloating floatpos        isterminal  noswallow  monitor */
+	{ "Dragon",  NULL,     NULL,           0,         1,         "50% 5%",          0,           0,        -1 },
+	{ "kitty",   NULL,     "kitty_fly",    0,         1,         "50% 50% 70% 70%", 0,           0,        -1 },
+	{ "kitty",   NULL,     "kitty_stack",  0,         0,         NULL,              1,           0,        -1 },
+	{ "firefox", NULL,     NULL,           1 << 1,    0,         NULL,              0,          -1,        -1 },
+	{ "Steam",   NULL,     NULL,           1 << 3,    0,         NULL,              0,           0,        -1 },
+    { "weixin",  NULL,     NULL,           1 << 4,    1,         NULL,              0,           1,        -1 },
+	{ "qq",      NULL,     NULL,           1 << 4,    1,         NULL,              0,           1,        -1 },
+	{ "MATLAB",  NULL,     NULL,           1 << 5,    0,         NULL,              0,           1,        -1 },
+	{ "Gimp",    NULL,     NULL,           1 << 5,    0,         NULL,              0,           1,        -1 },
+	{ "mpv",     NULL,     NULL,           0,         1,         NULL,              0,           0,        -1 },
+	{ NULL,      NULL,     "Event Tester", 0,         0,         NULL,              0,           1,        -1 }, /* xev */
 };
 
 /* layout(s) */
@@ -165,6 +167,15 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_s,      togglesticky,   {0} },
 	{ MODKEY,                       XK_n,      togglealttag,   {0} },
+    { MODKEY|ControlMask,           XK_u,        floatpos,   {.v = "  0%   0% 30% 30%" } }, // ↖
+    { MODKEY|ControlMask,           XK_i,        floatpos,   {.v = " 50%   0% 30% 30%" } }, // ↑
+    { MODKEY|ControlMask,           XK_o,        floatpos,   {.v = "100%   0% 30% 30%" } }, // ↗
+    { MODKEY|ControlMask,           XK_j,        floatpos,   {.v = "  0%  50% 30% 30%" } }, // ←
+    { MODKEY|ControlMask,           XK_k,        floatpos,   {.v = " 50%  50% 30% 30%" } }, // ·
+    { MODKEY|ControlMask,           XK_l,        floatpos,   {.v = "100%  50% 30% 30%" } }, // →
+    { MODKEY|ControlMask,           XK_m,        floatpos,   {.v = "  0% 100% 30% 30%" } }, // ↙
+    { MODKEY|ControlMask,           XK_comma,    floatpos,   {.v = " 50% 100% 30% 30%" } }, // ↓
+    { MODKEY|ControlMask,           XK_period,   floatpos,   {.v = "100% 100% 30% 30%" } }, // ↘
     /* Adjusting volume */
     { 0, XF86XK_AudioMute,        spawn, {.v = mute_vol }  },
     { 0, XF86XK_AudioLowerVolume, spawn, {.v = down_vol }  },
