@@ -83,15 +83,16 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "kitty",   NULL,     "zsh",          1,         0,          1,           0,        -1 },
+	{ "dragon",  NULL,     NULL,           0,         1,          0,          -1,        -1 },
+	{ "kitty",   NULL,     "kitty_fly",    0,         1,          0,           0,        -1 },
+	{ "kitty",   NULL,     "kitty_stack",  0,         0,          0,           0,        -1 },
 	{ "firefox", NULL,     NULL,           1 << 1,    0,          0,          -1,        -1 },
-	{ "kitty",   NULL,     "kitty_nnn",    1 << 2,    1,          0,           1,        -1 },
 	{ "Steam",   NULL,     NULL,           1 << 3,    0,          0,           0,        -1 },
     { "weixin",  NULL,     NULL,           1 << 4,    1,          0,           1,        -1 },
 	{ "qq",      NULL,     NULL,           1 << 4,    1,          0,           1,        -1 },
 	{ "MATLAB",  NULL,     NULL,           1 << 5,    0,          0,           1,        -1 },
 	{ "Gimp",    NULL,     NULL,           1 << 5,    0,          0,           1,        -1 },
-	{ "mpv",     NULL,     NULL,           0,         1,          0,           1,        -1 },
+	{ "mpv",     NULL,     NULL,           0,         1,          0,           0,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
@@ -124,7 +125,8 @@ static const Layout layouts[] = {
 /* commands */
 static const char *launchercmd[] = { "rofi", "-no-lazy-grab", "-show", "drun", "-modi", "drun", "-theme", "~/.config/rofi/launcher.rasi", NULL };
 static const char *filemanagercmd[]  = { "kitty", "--title", "kitty_nnn", "-e", "nnn","-c", "-Pp", NULL };
-static const char *termcmd[]  = { "kitty", "--title", "zsh", NULL };
+static const char *termcmd[]  = { "kitty", "--title", "kitty_stack", NULL };
+static const char *termcmd_fly[]  = { "kitty", "--title", "kitty_fly", NULL };
 static const char *musiccmd[]  = { "kitty", "--title", "ncmpcpp", "-e", "ncmpcpp", NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 static const char *up_vol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%",   NULL  };
@@ -139,7 +141,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_p,      spawn,          {.v = launchercmd } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = filemanagercmd } },
 	{ MODKEY,                       XK_m,      spawn,          {.v = musiccmd } },
-	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd_fly } },
+	{ MODKEY,                       XK_space,  spawn,          {.v = termcmd } },
     { MODKEY,                       XK_q,      killclient,     {0} },
     { MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("kill -9 $(xprop | grep _NET_WM_PID | awk '{print $3}')") },
 	{ MODKEY,                       XK_Escape, exitdwm,        {0} },
